@@ -9,7 +9,7 @@ char* fmtname(char *path){
   static char buf[DIRSIZ+1];
   char *p;
 
-  // Find first character after last slash.
+  // Find first character after last slash. 找到最后一个'/'后面的文件名
   for(p=path+strlen(path); p >= path && *p != '/'; p--);
   p++;
   memmove(buf, p, strlen(p)+1);
@@ -25,7 +25,7 @@ void find(char *path, char *re)
     char buf[512], *p;
     int fd;
     struct dirent de;
-    struct stat st;
+    struct stat st;     // 记录文件/文件夹信息
 
     if((fd = open(path, 0)) < 0){
         fprintf(2, "ls: cannot open %s\n", path);
@@ -50,12 +50,12 @@ void find(char *path, char *re)
                 break;
             }
             strcpy(buf, path);
-            p = buf+strlen(buf);
-            *p++ = '/';
-            while(read(fd, &de, sizeof(de)) == sizeof(de)){
+            p = buf+strlen(buf);    // p指向buf的最后
+            *p++ = '/';             // 最后加上'/'
+            while(read(fd, &de, sizeof(de)) == sizeof(de)){ // 该目录下的所有文件/文件夹
                 if(de.inum == 0)
                 continue;
-                memmove(p, de.name, DIRSIZ);
+                memmove(p, de.name, DIRSIZ);    // 拼上该路径
                 p[DIRSIZ] = 0;
                 if(stat(buf, &st) < 0){
                     printf("find: cannot stat %s\n", buf);
