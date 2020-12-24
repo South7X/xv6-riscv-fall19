@@ -35,7 +35,7 @@ filealloc(void)
   f = bd_malloc(sizeof(struct file));   // 动态分配文件描述符
 
   if (f){
-    memset(f, 0, sizeof(struct file));
+    memset(f, 0, sizeof(struct file));  // 初始化内存
     f->ref = 1;
     release(&ftable.lock);
     return f;
